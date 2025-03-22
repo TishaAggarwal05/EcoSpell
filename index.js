@@ -3,7 +3,7 @@ const fs = require("fs");
 require('dotenv').config() //for secret key
 
 const apiKey = process.env.API_KEY;
-console.log(apiKey);
+
 
 const subscriptionKey = apiKey;
 const serviceRegion = "eastus";
