@@ -1,7 +1,11 @@
 const sdk = require("microsoft-cognitiveservices-speech-sdk");
 const fs = require("fs");
+require('dotenv').config() //for secret key
 
-const subscriptionKey = "7hTJEP2PRP6GVLKdMW6G1xnZuSHvtd88ViaxUzCGDkrpO2wevV2pJQQJ99BCACYeBjFXJ3w3AAAYACOGDF8O";
+const apiKey = process.env.API_KEY;
+console.log(apiKey);
+
+const subscriptionKey = apiKey;
 const serviceRegion = "eastus";
 const audioFile = "shelly.wav";
 const referenceText = "shelly sell seashell";
