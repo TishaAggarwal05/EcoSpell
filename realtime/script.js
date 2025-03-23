@@ -3,7 +3,7 @@ let recognizer;
 let stopRecording;
 const subscriptionKeyy = "7hTJEP2PRP6GVLKdMW6G1xnZuSHvtd88ViaxUzCGDkrpO2wevV2pJQQJ99BCACYeBjFXJ3w3AAAYACOGDF8O";
 const serviceRegionn = "eastus";
-
+let referenceText = document.getElementById("referenceText").innerText;
 
 
 
@@ -25,7 +25,7 @@ pronunciationAssessmentConfig.enableProsodyAssessment = true; // Enable prosody 
 
 
 let mis_phonemeData = [];
-let referenceText = document.getElementById("referenceText").innerText;
+
 
 
 
