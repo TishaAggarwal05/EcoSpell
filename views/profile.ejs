@@ -1,0 +1,45 @@
+<% layout('layout/boilerplate') %>
+    
+    
+<div class="container d-flex flex-column">
+    <div>
+        user: <%=user.username %>
+        
+    </div>
+    <div>
+        gaurdian: <%= user.parent %>
+        
+        
+    </div>
+    <div>
+        email: <%= user.email  %>
+        
+    </div>
+</div>
+
+<div>
+    <h2>initial assessment result:</h2>
+    <div>
+        <ul>
+            <% for(let key in avgPhonemeAccuracy  ){ %>
+            
+                <li><%= key %>:<%= avgPhonemeAccuracy[key]  %></li>
+            <% } %>
+        </ul>
+    </div>
+
+
+</div>
+
+<div class="container d-flex">
+    <h2>CHAPTERS MADE: </h2>
+    <br>
+    <ul>
+
+        <% for(let ch of user.chapters ){ %>
+            <li><%= ch.phoneme %></li>
+        <% } %>
+    </ul>
+
+</div>
+

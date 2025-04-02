@@ -1,0 +1,24 @@
+GET - / - landing page (for this authentication needs to be implemented)
+            if not signed up - show link for start initial assessment
+            else - show link for view profile 
+
+
+get - /initassessment - realtime assessment begins(realtime.ejs)
+post - /initassessment - save initial assessmet 
+get - /result/:id - get the result of initial assessment (phoneme below threshold)(profile.ejs)
+
+
+
+
+
+/user/:user_id/chapter/new
+
+
+GET / - landing page
+GET /login - shows profile directly (abhi ke liye)
+GET /user/new - sign up new user form 
+POST /users - makes newuser and redirects to realtime assessment
+GET /realtime/:id - shows real time assessment page(initial of the user)
+POST /intialassessment/:id - saves the assessment json in designated user and redirects to below
+GET /result/:id - extract data from json process it and makes new chapter and also add in user the chapters made
+DELETE /User/:id - to cascadingly delete user
