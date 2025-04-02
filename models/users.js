@@ -23,6 +23,7 @@ const UserSchema = new mongoose.Schema({
         date: { type: Date, default: Date.now },
         data: Array // Stores the initial accuracy for each phoneme
     },
+    password: { type: String, required: true }, // Store hashed password
     chapters: [{ type: mongoose.Schema.Types.ObjectId, ref: "Chapter" }],
     progress: {
         lastLevel: String,
