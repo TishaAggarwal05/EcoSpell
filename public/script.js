@@ -1,14 +1,13 @@
 let sdk = window.SpeechSDK;
 let recognizer;
 let stopRecording;
-const subscriptionKeyy = "7hTJEP2PRP6GVLKdMW6G1xnZuSHvtd88ViaxUzCGDkrpO2wevV2pJQQJ99BCACYeBjFXJ3w3AAAYACOGDF8O";
-const serviceRegionn = "eastus";
+
 
 let referenceText = document.getElementById("referenceText").innerText;
 
 
 let audioConfig = sdk.AudioConfig.fromDefaultMicrophoneInput();
-let speechConfig = sdk.SpeechConfig.fromSubscription(subscriptionKeyy, serviceRegionn);
+let speechConfig = sdk.SpeechConfig.fromSubscription(process.env.subscriptionKeyy, process.env.serviceRegionn);
 
 speechConfig.speechRecognitionLanguage = "en-US";
 const pronunciationAssessmentConfig = new sdk.PronunciationAssessmentConfig(
