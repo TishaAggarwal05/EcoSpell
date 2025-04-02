@@ -19,7 +19,6 @@ main().catch(err => console.log(err));
 
 const path = require('path');
 const engine= require('ejs-mate');
-const { findByIdAndUpdate } = require('./models/pdetect.js');
 app.engine('ejs',engine);
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs')
