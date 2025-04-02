@@ -1,39 +1,23 @@
-<% layout('layout/boilerplate') %>
-<div style="height:90vh;" class="container d-flex justify-content-center mt-5">
+<%- include('layout/boilerplate') %>
 
-    <div class="d-flex flex-column align-items-center px-5 px-3-md">
-        <h1>SEE RESULT</h1>
-        <div>
+    <div style="height:90vh;" class="container d-flex justify-content-center mt-5">
+        <div class="d-flex flex-column align-items-center px-5 px-3-md">
+            <h1>Login</h1>
 
-            <label for="id"> ID : <input class="trans-inp" id="id" name= "id" placeholder="enter id" type="text"></label>
-            <button  class="btn-ultra-voilet btn " id="btn-inp">get data</button>
+            <% if (error_msg && error_msg.length> 0) { %>
+                <div style="color: red;">
+                    <%= error_msg[0] %>
+                </div>
+                <% } %>
+
+                    <form action="/login" method="POST">
+                        <label for="username">Username:</label>
+                        <input type="text" name="username" id="username" required>
+
+                        <label for="password">Password:</label>
+                        <input type="password" name="password" id="password" required>
+
+                        <button type="submit">Login</button>
+                    </form>
         </div>
-
     </div>
-    <!-- <div class="d-flex flex-column align-items-center px-5-lg px-3-md">
-        <h1>NO?</h1>
-        <button class="btn-ultra-voilet btn" id="assess">start initial assessment</button>
-
-    </div> -->
-</div>
-
-
-
-<script>
-let input=document.getElementById('id');
-let btn= document.getElementById('btn-inp');
-let btn_assess= document.getElementById('assess');
-btn.addEventListener('click',async()=>{
-    let val= input.value;
-    if (!val) {
-        alert("Please enter valid ID!");
-        return;
-    }
-    window.location.href = `/results/${val}`;
-
-    
-})
-btn_assess.addEventListener('click',async()=>{
-    window.location.href = "/initassessment"
-})
-</script>

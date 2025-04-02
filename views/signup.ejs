@@ -1,24 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Signup</title>
 </head>
+
 <body>
-    
-    <form action="/users" method="POST">
-        <div>
-            <label for="username">USERNAME:<input id="username" name="username" type="text"></label>
+    <% if (success_msg && success_msg.length> 0) { %>
+        <div style="color: green;">
+            <%= success_msg[0] %>
         </div>
-        <div>
-            <label for="parent">parent name:<input id="parent" name="parent" type="text"></label>
-        </div>
-        <div>
-            <label for="email">email:<input id="email" name="email" type="text"></label>
-        </div>
-        <button type="submit">Begin Magic!</button>
-        
-    </form>
+        <% } %>
+            <% if (error_msg && error_msg.length> 0) { %>
+                <div style="color: red;">
+                    <%= error_msg[0] %>
+                </div>
+                <% } %>
+
+                    <form action="/user/new" method="POST">
+                        <label>Username:</label>
+                        <input type="text" name="username" required>
+
+                        <label>Email:</label>
+                        <input type="email" name="email" required>
+
+                        <label>Password:</label>
+                        <input type="password" name="password" required>
+
+                        <label>Parent Name:</label>
+                        <input type="text" name="parent" required>
+
+                        <button type="submit">Submit</button>
+                    </form>
 </body>
+
 </html>
