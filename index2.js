@@ -12,7 +12,7 @@ const fetchData= require('./extract.js')//function for assessment of json data
 
 
 async function main() {
-  await mongoose.connect('mongodb+srv://aggarwaltisha05:BPKZJJE5w1UbflBf@echospell.rgovwms.mongodb.net/EchoSpell');
+  await mongoose.connect(process.env.MONGODB_URI);
 }
 main().catch(err => console.log(err));
 
