@@ -25,7 +25,10 @@ pronunciationAssessmentConfig.enableProsodyAssessment = true; // Enable prosody 
 
 
 
-
+function scrollText() {
+    const scrollContainer = document.getElementById("scrollContainer");
+    scrollContainer.scrollTop += 30; // Adjust scrolling speed
+}
 
 
 
@@ -85,24 +88,25 @@ async function assessing(callback1){
         if (jsonData.DisplayText) {
             recognizedText += jsonData.DisplayText.slice(0, -1) + " ";
             document.getElementById("recognizedText").innerText = recognizedText;
+            scrollText();
         }
 
-        console.log("kkkkkkk",recognizedText)
-        console.log(jsonData);
-        const recognizedWords = recognizedText.toLowerCase().split(" "); // Extract recognized words
-        const expectedWords = referenceText.toLowerCase().split(" "); // Convert expected words to lowercase
-        console.log(recognizedWords)
-        // Find missing words
-        const missingWords = expectedWords.filter(word => !recognizedWords.includes(word));
-        console.log(missingWords)
-        if (missingWords.length > 0) {
-            //if words missed show the missed words and dont do the assessment ask to try again
-            callback1(missingWords)
-        } else {
-            console.log("Great job! You said all the words correctly.");
+        // console.log("kkkkkkk",recognizedText)
+        // console.log(jsonData);
+        // const recognizedWords = recognizedText.toLowerCase().split(" "); // Extract recognized words
+        // const expectedWords = referenceText.toLowerCase().split(" "); // Convert expected words to lowercase
+        // console.log(recognizedWords)
+        // // Find missing words
+        // const missingWords = expectedWords.filter(word => !recognizedWords.includes(word));
+        // console.log(missingWords)
+        // if (missingWords.length > 0) {
+        //     //if words missed show the missed words and dont do the assessment ask to try again
+        //     callback1(missingWords)
+        // } else {
+        //     console.log("Great job! You said all the words correctly.");
                 
             
-        }
+        // }
         totalN_best.push(jsonData.NBest[0].Words);
         resolve({ recognizedText, totalN_best });
      

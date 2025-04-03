@@ -63,7 +63,7 @@ const processPhonemes = (data) => {
     for (let phoneme in phonemeData) {
         let accuracies = phonemeData[phoneme];
         let avgAccuracy =
-            accuracies.reduce((sum, score) => sum + score, 0) / accuracies.length;
+            (accuracies.reduce((sum, score) => sum + score, 0) / accuracies.length).toFixed(2);
         avgPhonemeAccuracy[phoneme] = avgAccuracy;
     }
 

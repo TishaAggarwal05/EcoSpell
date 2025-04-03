@@ -16,9 +16,17 @@ get - /result/:id - get the result of initial assessment (phoneme below threshol
 
 GET / - landing page
 GET /login - shows profile directly (abhi ke liye)
+POST /login - authenticates and renders login page 
 GET /user/new - sign up new user form 
-POST /users - makes newuser and redirects to realtime assessment
+POST /user/new - makes new user
 GET /realtime/:id - shows real time assessment page(initial of the user)
 POST /intialassessment/:id - saves the assessment json in designated user and redirects to below
 GET /result/:id - extract data from json process it and makes new chapter and also add in user the chapters made
+GET /confirmation - 
+GET /user/profile/:id-
+
 DELETE /User/:id - to cascadingly delete user
+
+
+
+

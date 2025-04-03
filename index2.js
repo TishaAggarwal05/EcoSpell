@@ -176,7 +176,7 @@ app.post('/user/new', async (req, res) => {
 
 app.get('/realtime/:id', (req, res) => {
     const { id } = req.params;
-    res.render('realtime', { id }); // initial assessment
+    res.render('realtime2', { id }); // initial assessment
 });
 
 app.post('/initassessment/:id', async (req, res) => {
@@ -203,7 +203,8 @@ app.get("/results/:id", async (req, res) => {
     const userId = new mongoose.Types.ObjectId(id);
     for (const arr of lowAccur) {
         const phoneme = arr[0];
-        const newCh = new Chapter({ user_id: userId, phoneme: phoneme });
+        const score= arr[1];
+        const newCh = new Chapter({ user_id: userId, phoneme: phoneme ,currentAccur:score});
         await newCh.save();
         console.log(`New Chapter Created:`, newCh);
         await User.findByIdAndUpdate(userId, { $push: { chapters: newCh._id } }, { new: true });
@@ -220,7 +221,7 @@ app.get('/user/profile/:id', async (req, res) => {
     res.render('profile', { user, avgPhonemeAccuracy });
 });
 
-// CHAPTERS ROUTES, LEVELS ROUTES, etc.
+
 
 
 app.delete("/User/:id", async (req, res) => {
@@ -240,23 +241,7 @@ app.delete("/User/:id", async (req, res) => {
 });
 
 
-// app.post('/users', async (req, res) => {
-//     console.log(req.body);
-//     const { username, parent, email } = req.body;
-//     const user = new User(req.body);
-//     await user.save();
-//     const finduser = await User.findOne({ username: username });
-//     console.log(finduser);
-//     const id = finduser._id;
-//     console.log(id);
-//     res.redirect(`/realtime/${id}`);
-// });
 
-
-// Profile Route (Protected)
-// app.get("/profile", isAuthenticated, (req, res) => {
-//     res.render("profile", { user: req.user });
-// });
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

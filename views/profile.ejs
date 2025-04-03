@@ -16,6 +16,22 @@
         
     </div>
 </div>
+<div>
+    <H2>LATEST LEVEL SCORES</H2>
+    <div class="container d-flex flex-row flex-wrap">
+        
+        <% for(let ch of user.chapters ){ %>
+            <div class="mx-4">
+
+                <div class="mx-3"><%= ch.phoneme %>:<%= ch.currentAccur %></div>
+                <div>
+                    levels played: <%= ch.levels.length %>
+                </div>
+            </div>
+        <% } %>
+    </div>
+
+</div>
 
 <div>
     <h2>initial assessment result:</h2>

@@ -4,8 +4,8 @@ const LevelSchema = new mongoose.Schema({
     chapter_id: { type: mongoose.Schema.Types.ObjectId, ref: "Chapter" },
     user_id: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     phoneme: String,
-    score: Number,
-    recording: String
+    score: Number
+   
 });
 const Level = mongoose.model("Level", LevelSchema);
 
