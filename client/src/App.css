@@ -1,0 +1,256 @@
+body {
+  margin: 0;
+  padding: 0;
+  background-image: url("/background.jpg");
+  /* If in public */
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  /* Ensures the image stays constant */
+  background-repeat: no-repeat;
+  height: 100vh;
+  font-family: "Cinzel Decorative", serif;
+}
+
+.landing-header {
+  text-align: center;
+  padding: 100px 20px;
+  /* background: linear-gradient(to right, #4facfe, #00f2fe); */
+  color: white;
+}
+
+.landing-header h1 {
+  font-size: 3rem;
+  margin-bottom: 10px;
+}
+
+.landing-header p {
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+}
+
+.landing-header button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  border: -2px solid white;
+  background-color: #092324;
+  color: white;
+  cursor: pointer;
+  border-radius: 16px;
+  transition: 0.3s;
+  width: 29%;
+  height: 57px;
+}
+
+.landing-header button:hover {
+  background-color: #102a2b;
+}
+
+/* Overall Page */
+.landing-page {
+  background: url("/assets/magic-bg.jpg") no-repeat center center fixed;
+  background-size: cover;
+  color: white;
+  text-align: center;
+  padding-bottom: 50px;
+}
+
+/* Hero Section */
+.landing-header {
+  padding: 80px 20px;
+  font-family: "Cinzel Decorative", serif;
+}
+
+.landing-header h1 {
+  font-size: 3rem;
+  text-shadow: 0px 0px 10px rgba(255, 255, 255, 0.8);
+}
+
+.landing-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  /* At least full viewport height */
+}
+
+.landing-content {
+  flex: 1;
+  /* Takes up remaining space, pushing footer naturally to bottom */
+}
+
+/* Features Section */
+.features-section {
+  padding: 50px 20px;
+  text-align: center;
+}
+
+/* Styled Heading */
+.section-heading,
+.features-heading {
+  color: white;
+  font-size: 2.5rem;
+  font-family: "Cinzel Decorative", serif;
+  text-transform: uppercase;
+  position: relative;
+  display: inline-block;
+  padding-bottom: 10px;
+}
+
+/* Adding the horizontal lines and diamonds */
+.section-heading::before,
+.section-heading::after,
+.features-heading::before,
+.features-heading::after {
+  content: "";
+  display: inline-block;
+  width: 80px;
+  height: 2px;
+  background: white;
+  vertical-align: middle;
+  margin: 0 15px;
+}
+
+.section-heading::before,
+.features-heading::before {
+  color: white;
+  content: "◇";
+  font-size: 1.2rem;
+  margin-right: 10px;
+}
+
+.section-heading::after,
+.features-heading::after {
+  content: "◇";
+  font-size: 1.2rem;
+  margin-left: 10px;
+}
+
+/* Feature Boxes */
+.features-container {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-top: 30px;
+}
+
+.feature-box {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 40px;
+  width: 300px;
+  height: 200px;
+  font-size: 1.4rem;
+  font-weight: bold;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  color: white;
+  text-align: center;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  font-family: "Cinzel Decorative", serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Hover Effect */
+.feature-box:hover {
+  transform: translateY(-10px);
+  box-shadow: 0px 6px 15px rgba(255, 255, 255, 0.4);
+}
+
+/* Common Heading Style (Same as Features) */
+.section-heading {
+  font-size: 2.5rem;
+  /* font-weight: bold;
+  text-align: center;
+  margin-bottom: 20px;
+  text-transform: uppercase; */
+}
+
+/* Storyline Section */
+.storyline-section {
+  padding: 50px 10%;
+  color: white;
+  text-align: center;
+}
+
+.storyline-text {
+  font-size: 18px;
+  line-height: 1.6;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+
+
+/* HOW IT WORKS Section */
+.how-it-works {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 50px 10%;
+  /* Dark background */
+  color: white;
+}
+
+/* Steps (Bookmark-style boxes) */
+.steps-container {
+  display: flex;
+  gap: 20px;
+}
+
+.step-box {
+  background: #444;
+  color: white;
+  padding: 24px;
+  font-size: 20px;
+  font-weight: bold;
+  border-radius: 10px 10px 10px 10px;
+  width: 150px;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.3s ease, background 0.3s ease;
+}
+
+/* Different Colors */
+.red {
+  background: #d83b3b;
+}
+
+.blue {
+  background: #2f65d4;
+}
+
+.yellow {
+  background: #d4a62f;
+}
+
+.green {
+  background: #2fd46f;
+}
+
+/* Hover Effects */
+.step-box:hover {
+  transform: scale(1.1);
+  background: white;
+  color: black;
+}
+
+/* HOW IT WORKS Title */
+.how-it-works-text h2 {
+  font-size: 36px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+
+/* footer styles */
+footer {
+  background: #061c27;
+  color: white;
+  text-align: center;
+  padding: 10px;
+  position: relative;
+  /* bottom: 0; */
+  width: 100%;
+}
