@@ -12,7 +12,8 @@ const mongoose = require('mongoose');
 const UserSchema = new mongoose.Schema({
     username: {
       type:String,
-      required:[true,"name is required.."]
+      required:[true,"name is required.."],
+      unique: [true,"provide a unique username its already taken"]
     },
     parent:{
       type:String,

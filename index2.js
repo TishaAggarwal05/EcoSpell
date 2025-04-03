@@ -19,6 +19,19 @@ const Chapter = require('./models/chapters.js');
 const Level = require('./models/levels.js');
 const fetchData = require('./extract.js'); // function for assessment of json data
 
+
+
+
+// Set up EJS with ejs-mate
+app.engine('ejs', engine);
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(morgan('tiny'));
+
+
 async function main() {
   await mongoose.connect(process.env.MONGODB_URI);
 }
@@ -30,7 +43,7 @@ app.use(session({
     resave: false,
     saveUninitialized: false,
     store: MongoStore.create({
-        mongoUrl: 'mongodb+srv://aggarwaltisha05:BPKZJJE5w1UbflBf@echospell.rgovwms.mongodb.net/EchoSpell',
+        mongoUrl: process.env.MONGODB_URI,
         collectionName: 'sessions'
     }),
     cookie: { maxAge: 1000 * 60 * 60 * 24 } // 1-day session persistence
@@ -38,9 +51,7 @@ app.use(session({
 
 
 
-app.engine('ejs',engine);
-app.set('views', path.join(__dirname, 'views'))
-app.set('view engine', 'ejs')
+
 // Flash middleware
 const flash = require("connect-flash");
 app.use(flash());
@@ -56,8 +67,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Passport Local Strategy for Authentication
-passport.use(new LocalStrategy(async (username, password, done) => {
-    const user = await User.findOne({ username });
+passport.use(new LocalStrategy({ usernameField: "email" },async (email, password, done) => {
+    const user = await User.findOne({ email });
     if (!user) return done(null, false, { message: "User not found" });
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return done(null, false, { message: "Incorrect password" });
@@ -79,30 +90,28 @@ function isAuthenticated(req, res, next) {
     res.redirect("/login");
 }
 
-// (Existing /users route left intact if needed)
-app.post('/users', async (req, res) => {
-    const { username, parent, email, password } = req.body;
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-    const user = new User({ username, parent, email, password: hashedPassword });
-    await user.save();
-    req.login(user, (err) => {
-        if (err) return res.status(500).send("Error logging in after signup.");
-        return res.redirect("/dashboard");
-    });
+
+app.get('/login', (req, res) => {
+    res.render('login', { messages: { error: req.flash("error") || [] } });
 });
 
-// Login Route
-app.post('/login', passport.authenticate("local", {
-    successRedirect: "/dashboard",
-    failureRedirect: "/login",
-    failureFlash: true // Enables flash messages for authentication failures
-}));
-
-// Protected Route Example
-app.get('/dashboard', isAuthenticated, (req, res) => {
-    res.render('dashboard', { user: req.user });
+app.post('/login', (req, res, next) => {
+    passport.authenticate("local", (err, user, info) => {
+        if (err) return next(err);
+        if (!user) {
+            req.flash("error", info.message);
+            res.render('login', { messages: { error: req.flash("error") || [] } });
+        }
+        
+        req.login(user, (err) => {
+            if (err) return next(err);
+            return res.redirect(`/user/profile/${user._id}`); 
+        });
+    })(req, res, next);
 });
+
+
+
 
 // Logout Route
 app.get('/logout', (req, res) => {
@@ -112,81 +121,59 @@ app.get('/logout', (req, res) => {
     });
 });
 
-// Set up EJS with ejs-mate
-app.engine('ejs', engine);
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
-app.use(morgan('tiny'));
+
 
 app.get('/', (req, res) => {
   res.render('landing');
 });
 
-app.get('/login', (req, res) => {
-  res.render('login.ejs');
-});
+
 
 // USER ROUTES
 
+
 app.get('/user/new', (req, res) => {
-  res.render("signup");
+    res.render('signup', { messages: req.flash(), formData: {} });
 });
 
+//Handle POST request for user registration
 app.post('/user/new', async (req, res) => {
     const { username, parent, email, password } = req.body;
+
+
     try {
-        let user = await User.findOne({ username });
-        if (user) {
-            // User exists: attempt login
-            const isMatch = await bcrypt.compare(password, user.password);
-            if (!isMatch) {
-                req.flash("error", "Incorrect password");
-                return res.render("signup");
-            }
-            req.flash("success", "Login successful!");
-            return res.render("signup");
-        } else {
-            // New user: register them
-            const salt = await bcrypt.genSalt(10);
-            const hashedPassword = await bcrypt.hash(password, salt);
-            user = new User({ username, parent, email, password: hashedPassword });
-            await user.save();
-            req.flash("success", "User registered successfully!");
-            return res.render("signup");
+        let existingUser = await User.findOne({ email });
+
+        if (existingUser) {
+            req.flash("error", "An account with this email already exists. Please log in.");
+            return res.render("signup", { messages: { error: req.flash("error") }, formData: req.body });
         }
+
+        let existingUsername = await User.findOne({ username });
+        if (existingUsername) {
+            req.flash("error", "This username is already taken. Try a different one.");
+            return res.render("signup", { messages: { error: req.flash("error") }, formData: req.body });
+        }
+
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
+
+        const newUser = new User({ username, parent, email, password: hashedPassword });
+        await newUser.save();
+
+        req.flash("success", "User registered successfully!");
+        return res.redirect(`/realtime/${newUser._id}`);
+
     } catch (err) {
-        console.error(err);
-        req.flash("error", "Server error occurred.");
-        return res.render("signup");
+        console.error("Error during signup:", err);
+        req.flash("error", "Something went wrong. Please try again.");
+        return res.render('signup', { messages: { error: req.flash("error") }, formData: req.body });
     }
 });
 
-app.post('/users', async (req, res) => {
-    console.log(req.body);
-    const { username, parent, email } = req.body;
-    const user = new User(req.body);
-    await user.save();
-    const finduser = await User.findOne({ username: username });
-    console.log(finduser);
-    const id = finduser._id;
-    console.log(id);
-    res.redirect(`/realtime/${id}`);
-});
 
-app.get('/user/profile/:id', async (req, res) => {
-    const { id } = req.params;
-    console.log("Fetching profile for user id:", id);
-    const { lowAccur, avgPhonemeAccuracy } = await fetchData(id);
-    const user = await User.findOne({ _id: id }).populate('chapters');
-    console.log(user);
-    res.render('profile', { user, avgPhonemeAccuracy });
-});
 
-// CHAPTERS ROUTES, LEVELS ROUTES, etc.
 app.get('/realtime/:id', (req, res) => {
     const { id } = req.params;
     res.render('realtime', { id }); // initial assessment
@@ -224,6 +211,18 @@ app.get("/results/:id", async (req, res) => {
     res.render('confirmation', { id });
 });
 
+app.get('/user/profile/:id', async (req, res) => {
+    const { id } = req.params;
+    console.log("Fetching profile for user id:", id);
+    const { lowAccur, avgPhonemeAccuracy } = await fetchData(id);
+    const user = await User.findOne({ _id: id }).populate('chapters');
+    console.log(user);
+    res.render('profile', { user, avgPhonemeAccuracy });
+});
+
+// CHAPTERS ROUTES, LEVELS ROUTES, etc.
+
+
 app.delete("/User/:id", async (req, res) => {
     const { id } = req.params;
     try {
@@ -239,6 +238,25 @@ app.delete("/User/:id", async (req, res) => {
         res.status(500).send("Error deleting user");
     }
 });
+
+
+// app.post('/users', async (req, res) => {
+//     console.log(req.body);
+//     const { username, parent, email } = req.body;
+//     const user = new User(req.body);
+//     await user.save();
+//     const finduser = await User.findOne({ username: username });
+//     console.log(finduser);
+//     const id = finduser._id;
+//     console.log(id);
+//     res.redirect(`/realtime/${id}`);
+// });
+
+
+// Profile Route (Protected)
+// app.get("/profile", isAuthenticated, (req, res) => {
+//     res.render("profile", { user: req.user });
+// });
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
