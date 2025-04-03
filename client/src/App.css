@@ -30,20 +30,56 @@ body {
 }
 
 .landing-header button {
-  padding: 10px 20px;
-  font-size: 1rem;
-  border: -2px solid white;
-  background-color: #092324;
+  padding: 12px 24px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  border: none;
+  background: linear-gradient(90deg, #d9a7ff, #8a2be2);
   color: white;
   cursor: pointer;
   border-radius: 16px;
-  transition: 0.3s;
-  width: 29%;
-  height: 57px;
+  transition: 0.4s ease-in-out;
+  width: 26%;
+  height: 60px;
+  box-shadow: 0 0 10px rgba(255, 105, 180, 0.8), 0 0 20px rgba(138, 43, 226, 0.6);
+  text-transform: uppercase;
+  position: relative;
+  overflow: hidden;
 }
 
+/* Hover Magic Effect */
 .landing-header button:hover {
-  background-color: #102a2b;
+  background: linear-gradient(90deg, #8a2be2, #ff69b4);
+  box-shadow: 0 0 15px rgba(255, 105, 180, 1), 0 0 25px rgba(138, 43, 226, 1);
+  transform: scale(1.1);
+}
+
+/* Sparkling Animation
+.landing-header button::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  width: 40px;
+  height: 40px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0));
+  opacity: 0.6;
+  border-radius: 50%;
+  animation: sparkle 1.5s infinite linear;
+} */
+
+@keyframes sparkle {
+  0% {
+    transform: translate(0, 0) scale(0.8);
+  }
+
+  50% {
+    transform: translate(180px, 0) scale(1);
+  }
+
+  100% {
+    transform: translate(0, 0) scale(0.8);
+  }
 }
 
 /* Overall Page */
@@ -85,6 +121,7 @@ body {
 }
 
 /* Styled Heading */
+.how-it-works h2,
 .section-heading,
 .features-heading {
   color: white;
@@ -96,7 +133,20 @@ body {
   padding-bottom: 10px;
 }
 
+/* 
+.how-it-works h2 {
+  color: white;
+  font-size: 2.5rem;
+  font-family: "Cinzel Decorative", serif;
+  text-transform: uppercase;
+  position: relative;
+  display: inline-block;
+  padding-bottom: 10px;
+} */
+
 /* Adding the horizontal lines and diamonds */
+.how-it-works h2::before,
+.how-it-works h2::after,
 .section-heading::before,
 .section-heading::after,
 .features-heading::before,
@@ -110,6 +160,7 @@ body {
   margin: 0 15px;
 }
 
+.how-it-works h2::before,
 .section-heading::before,
 .features-heading::before {
   color: white;
@@ -118,10 +169,26 @@ body {
   margin-right: 10px;
 }
 
+.how-it-works h2::before {
+  color: white;
+  content: "◇";
+  font-size: 1.2rem;
+  text-align: center;
+  margin-right: 10px;
+}
+
+.how-it-works h2::after,
 .section-heading::after,
 .features-heading::after {
   content: "◇";
   font-size: 1.2rem;
+  margin-left: 10px;
+}
+
+.how-it-works h2::after {
+  content: "◇";
+  font-size: 1.2rem;
+  text-align: center;
   margin-left: 10px;
 }
 
@@ -133,29 +200,49 @@ body {
   margin-top: 30px;
 }
 
+/* Feature Box - Magical Glow Effect */
 .feature-box {
-  background: rgba(255, 255, 255, 0.1);
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
   padding: 40px;
   width: 300px;
   height: 200px;
   font-size: 1.4rem;
   font-weight: bold;
-  border: 2px solid rgba(255, 255, 255, 0.5);
-  color: white;
+  border-radius: 12px;
   text-align: center;
-  border-radius: 10px;
-  box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.2);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  color: white;
   font-family: "Cinzel Decorative", serif;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  box-shadow: 0px 4px 20px rgba(255, 255, 255, 0.2);
+  position: relative;
+  overflow: hidden;
+  transition: 0.3s ease-in-out;
 }
 
-/* Hover Effect */
+.feature-box p {
+  font-size: 19px;
+  font-weight: 400;
+}
+
+/* Magical pulse effect */
+.feature-box::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 10%, transparent 75%);
+  transform: rotate(65deg);
+}
+
+.feature-box:hover::before {
+  top: 0;
+  left: 0;
+}
+
 .feature-box:hover {
   transform: translateY(-10px);
-  box-shadow: 0px 6px 15px rgba(255, 255, 255, 0.4);
+  box-shadow: 0px 6px 25px rgba(255, 255, 255, 0.4);
 }
 
 /* Common Heading Style (Same as Features) */
@@ -182,67 +269,132 @@ body {
 }
 
 
-
-/* HOW IT WORKS Section */
 .how-it-works {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
-  padding: 50px 10%;
-  /* Dark background */
-  color: white;
+  padding: 50px 20px;
+  position: relative;
 }
 
-/* Steps (Bookmark-style boxes) */
-.steps-container {
+.how-it-works h2 {
+  font-size: 2.5rem;
+  /* color: #f4e3ff;
+  /* Soft magical glow */
+  /* text-shadow: 0 0 10px #d9a7ff, 0 0 20px #c678dd;
+  margin-bottom: 30px; */
+
+}
+
+.roadmap {
+  position: relative;
+  width: 60%;
   display: flex;
-  gap: 20px;
+  flex-direction: column;
+  align-items: center;
 }
 
-.step-box {
-  background: #444;
-  color: white;
-  padding: 24px;
-  font-size: 20px;
+/* Vertical glowing path */
+.roadmap::before {
+  content: "";
+  position: absolute;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(to bottom, #d9a7ff, #c678dd);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 0;
+  animation: glowPath 2s infinite alternate;
+}
+
+/* Glowing animation for the path */
+@keyframes glowPath {
+  0% {
+    box-shadow: 0 0 5px #d9a7ff;
+  }
+
+  100% {
+    box-shadow: 0 0 15px #c678dd;
+  }
+}
+
+/* Step Container */
+.roadmap-step {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  position: relative;
+  margin: 30px 0;
+}
+
+/* Alternating step alignment */
+.roadmap-step:nth-child(odd) {
+  flex-direction: row-reverse;
+  text-align: right;
+}
+
+.roadmap-step:nth-child(even) {
+  text-align: left;
+}
+
+/* Step Orb */
+.step-orb {
+  width: 50px;
+  height: 50px;
+  background: radial-gradient(circle, #ffccff, #d9a7ff);
+  border-radius: 50%;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  box-shadow: 0 0 15px #e0aaff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
   font-weight: bold;
-  border-radius: 10px 10px 10px 10px;
-  width: 150px;
+  color: #45006e;
+  z-index: 2;
+}
+
+/* Step Content */
+.step-content {
+  width: 45%;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  backdrop-filter: blur(10px);
   text-align: center;
-  cursor: pointer;
-  transition: transform 0.3s ease, background 0.3s ease;
+  font-size: 20px;
 }
 
-/* Different Colors */
-.red {
-  background: #d83b3b;
+/* Glowing Arrows */
+.roadmap-step::after {
+  content: "↓";
+  font-size: 2rem;
+  color: #c678dd;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 75px;
+  animation: glowArrow 1.5s infinite alternate;
 }
 
-.blue {
-  background: #2f65d4;
+@keyframes glowArrow {
+  0% {
+    text-shadow: 0 0 5px #d9a7ff;
+  }
+
+  100% {
+    text-shadow: 0 0 15px #c678dd;
+  }
 }
 
-.yellow {
-  background: #d4a62f;
+/* Remove arrow from last step */
+.roadmap-step:last-child::after {
+  display: none;
 }
-
-.green {
-  background: #2fd46f;
-}
-
-/* Hover Effects */
-.step-box:hover {
-  transform: scale(1.1);
-  background: white;
-  color: black;
-}
-
-/* HOW IT WORKS Title */
-.how-it-works-text h2 {
-  font-size: 36px;
-  font-weight: bold;
-  text-transform: uppercase;
-}
-
 
 /* footer styles */
 footer {

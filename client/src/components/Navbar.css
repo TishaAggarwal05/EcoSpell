@@ -18,7 +18,7 @@
     position: absolute;
     width: 1011px;
     height: 1000px;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.3) -195%, transparent 61%);
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.3) -87%, transparent 61%);
     border-radius: 100%;
     pointer-events: none;
     transform: translate(-50%, -50%);

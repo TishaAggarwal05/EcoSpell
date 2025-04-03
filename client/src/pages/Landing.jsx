@@ -21,9 +21,18 @@ const Landing = () => {
                 <section className="features-section">
                     <h2 className="features-heading">FEATURES</h2>
                     <div className="features-container">
-                        <div className="feature-box">🪄 Spell-Based Speech Exercises</div>
-                        <div className="feature-box">📜 Personalized Learning Paths</div>
-                        <div className="feature-box">🎤 AI-Powered Pronunciation Check</div>
+                        <div className="feature-box">
+                            <h3>🪄 Spell-Based Speech Exercises</h3>
+                            <p>Engage in interactive spell-based challenges designed to improve your pronunciation and speech fluency.</p>
+                        </div>
+                        <div className="feature-box">
+                            <h3>📜 Personalized Learning Paths</h3>
+                            <p>Follow a customized learning journey tailored to your strengths and areas that need improvement.</p>
+                        </div>
+                        <div className="feature-box">
+                            <h3>🎤 AI-Powered Pronunciation Check</h3>
+                            <p>Receive real-time feedback on your pronunciation with our cutting-edge AI-powered speech analysis.</p>
+                        </div>
                     </div>
                 </section>
 
@@ -37,20 +46,26 @@ const Landing = () => {
                     </p>
                 </section>
 
-
                 {/* HOW IT WORKS Section */}
                 <section className="how-it-works">
-                    {/* Bookmark-like elements on the left */}
-                    <div className="steps-container">
-                        <div className="step-box red">Step 1: GET STARTED</div>
-                        <div className="step-box blue">Step 2: GIVE ASSESSMENT</div>
-                        <div className="step-box yellow">Step 3: PRACTICE EXERCISES</div>
-                        <div className="step-box green">Step 4: IMPROVE AND MASTER</div>
-                    </div>
-
-                    {/* Title on the right */}
-                    <div className="how-it-works-text">
-                        <h2>HOW IT WORKS?</h2>
+                    <h2>HOW IT WORKS</h2>
+                    <div className="roadmap">
+                        <div className="roadmap-step">
+                            <div className="step-orb">1</div>
+                            <div className="step-content">Step 1: GET STARTED</div>
+                        </div>
+                        <div className="roadmap-step">
+                            <div className="step-orb">2</div>
+                            <div className="step-content">Step 2: GIVE ASSESSMENT</div>
+                        </div>
+                        <div className="roadmap-step">
+                            <div className="step-orb">3</div>
+                            <div className="step-content">Step 3: PRACTICE EXERCISES</div>
+                        </div>
+                        <div className="roadmap-step">
+                            <div className="step-orb">4</div>
+                            <div className="step-content">Step 4: IMPROVE AND MASTER</div>
+                        </div>
                     </div>
                 </section>
             </div>
