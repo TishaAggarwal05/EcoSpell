@@ -1,8 +1,10 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./Navbar.css";
 
 const Navbar = () => {
     const [glowStyle, setGlowStyle] = useState({});
+    const navigate = useNavigate();
 
     // Function to update glow position based on cursor movement
     const handleMouseMove = (e) => {
@@ -30,8 +32,8 @@ const Navbar = () => {
 
             {/* Right: Login/Signup */}
             <div className="auth-buttons">
-                <button className="login">Login</button>
-                <button className="signup">Sign Up</button>
+                <button className="login" onClick={() => navigate("/login")}>Login</button>
+                <button className="signup" onClick={() => navigate("/signup")}>Sign Up</button>
             </div>
         </nav>
     );
