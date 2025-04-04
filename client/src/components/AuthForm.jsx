@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./../styles/auth.css";
 
-const AuthForm = ({ formType, onSubmit }) => {
+const AuthForm = ({ formType }) => {
     const [formData, setFormData] = useState({
         username: "",
         email: "",
@@ -13,10 +13,29 @@ const AuthForm = ({ formType, onSubmit }) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
+    // const handleSubmit = (e) => {
+    //     e.preventDefault();
+    //     onSubmit(formData);
+    // };
     const handleSubmit = (e) => {
         e.preventDefault();
-        onSubmit(formData);
+    
+        fetch("http://localhost:5500/user/new", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formData),
+        })
+        
+        .then((res) => res.json())
+        .then((data) => {
+            console.log("Redirecting to:", data.redirect);
+            window.location.href = `http://localhost:5500/realtime/${data.userId}`;
+        });
     };
+    
+    
 
     return (
         <div className="magic-container">
