@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const express = require('express');
 const morgan = require('morgan');
 require('dotenv').config();
+const cors = require("cors");
 
 const session = require("express-session");
 const passport = require("passport");
@@ -30,7 +31,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('tiny'));
-
+app.use(
+    cors({
+        origin: "http://localhost:5173",  // ✅ Allow only your frontend
+        credentials: true,  // ✅ Allow sending cookies/sessions
+        methods: ["GET", "POST", "PUT", "DELETE"],  // ✅ Allowed HTTP methods
+        allowedHeaders: ["Content-Type", "Authorization"],  // ✅ Allowed headers
+    })
+);
 
 async function main() {
   await mongoose.connect(process.env.MONGODB_URI);
@@ -91,24 +99,38 @@ function isAuthenticated(req, res, next) {
 }
 
 
-app.get('/login', (req, res) => {
-    res.render('login', { messages: { error: req.flash("error") || [] } });
-});
+// app.get('/login', (req, res) => {
+//     res.render('login', { messages: { error: req.flash("error") || [] } });
+// });
 
+// app.post('/login', (req, res, next) => {
+//     passport.authenticate("local", (err, user, info) => {
+//         if (err) return next(err);
+//         if (!user) {
+//             req.flash("error", info.message);
+//             res.render('login', { messages: { error: req.flash("error") || [] } });
+//         }
+        
+//         req.login(user, (err) => {
+//             if (err) return next(err);
+//             return res.redirect(`/user/profile/${user._id}`); 
+//         });
+//     })(req, res, next);
+// });
 app.post('/login', (req, res, next) => {
     passport.authenticate("local", (err, user, info) => {
         if (err) return next(err);
         if (!user) {
-            req.flash("error", info.message);
-            res.render('login', { messages: { error: req.flash("error") || [] } });
+            return res.status(401).json({ success: false, message: info.message || "Invalid credentials" });
         }
         
         req.login(user, (err) => {
             if (err) return next(err);
-            return res.redirect(`/user/profile/${user._id}`); 
+            return res.json({ success: true, userId: user._id,redirect: `/user/profile/${user._id}` }); // Send JSON response
         });
     })(req, res, next);
 });
+
 
 
 
@@ -138,22 +160,51 @@ app.get('/user/new', (req, res) => {
 });
 
 //Handle POST request for user registration
+// app.post('/user/new', async (req, res) => {
+//     const { username, parent, email, password } = req.body;
+
+
+//     try {
+//         let existingUser = await User.findOne({ email });
+
+//         if (existingUser) {
+//             req.flash("error", "An account with this email already exists. Please log in.");
+//             return res.render("signup", { messages: { error: req.flash("error") }, formData: req.body });
+//         }
+
+//         let existingUsername = await User.findOne({ username });
+//         if (existingUsername) {
+//             req.flash("error", "This username is already taken. Try a different one.");
+//             return res.render("signup", { messages: { error: req.flash("error") }, formData: req.body });
+//         }
+
+//         const salt = await bcrypt.genSalt(10);
+//         const hashedPassword = await bcrypt.hash(password, salt);
+
+//         const newUser = new User({ username, parent, email, password: hashedPassword });
+//         await newUser.save();
+
+//         req.flash("success", "User registered successfully!");
+//         return res.redirect(`/realtime/${newUser._id}`);
+
+//     } catch (err) {
+//         console.error("Error during signup:", err);
+//         req.flash("error", "Something went wrong. Please try again.");
+//         return res.render('signup', { messages: { error: req.flash("error") }, formData: req.body });
+//     }
+// });
 app.post('/user/new', async (req, res) => {
     const { username, parent, email, password } = req.body;
 
-
     try {
         let existingUser = await User.findOne({ email });
-
         if (existingUser) {
-            req.flash("error", "An account with this email already exists. Please log in.");
-            return res.render("signup", { messages: { error: req.flash("error") }, formData: req.body });
+            return res.status(400).json({ success: false, error: "An account with this email already exists. Please log in." });
         }
 
         let existingUsername = await User.findOne({ username });
         if (existingUsername) {
-            req.flash("error", "This username is already taken. Try a different one.");
-            return res.render("signup", { messages: { error: req.flash("error") }, formData: req.body });
+            return res.status(400).json({ success: false, error: "This username is already taken. Try a different one." });
         }
 
         const salt = await bcrypt.genSalt(10);
@@ -162,13 +213,11 @@ app.post('/user/new', async (req, res) => {
         const newUser = new User({ username, parent, email, password: hashedPassword });
         await newUser.save();
 
-        req.flash("success", "User registered successfully!");
-        return res.redirect(`/realtime/${newUser._id}`);
+        return res.status(201).json({ success: true, message: "User registered successfully!", userId: newUser._id,redirect: `/realtime/${newUser._id}` });
 
     } catch (err) {
         console.error("Error during signup:", err);
-        req.flash("error", "Something went wrong. Please try again.");
-        return res.render('signup', { messages: { error: req.flash("error") }, formData: req.body });
+        return res.status(500).json({ success: false, error: "Something went wrong. Please try again." });
     }
 });
 

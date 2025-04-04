@@ -1,15 +1,28 @@
-*{
+* {
     font-family: "Cinzel", serif;
+}
 
-}
 body {
-    background: radial-gradient(circle at top, rgba(66, 39, 90, 0.6), rgba(10, 10, 20, 1)), 
-                radial-gradient(circle at bottom right, rgba(58, 101, 186, 0.5), transparent);
-    background-color: #0a0a14; 
+    background: radial-gradient(circle at top, rgba(20, 10, 40, 0.8), rgba(5, 5, 15, 1)), 
+                radial-gradient(circle at bottom right, rgba(30, 60, 120, 0.5), transparent);
+    background-color: #05050f; 
     color: white;
-    
 }
-/* glow words */
+
+.btn-ultra-violet {
+    background: linear-gradient(to right, #b478c3, #472b85);
+    color: #fff;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-weight: bold;
+    transition: all 0.3s ease-in-out;
+}
+
+.btn-ultra-violet:hover {
+    --box-shadow-color: rgba(132, 74, 178, 0.9);
+    box-shadow: 0 0 15px var(--box-shadow-color);
+    transform: scale(1.05);
+}
 
 .word {
     transition: color 0.3s, text-shadow 0.3s;
@@ -50,15 +63,7 @@ body {
     font-weight: 700px;
     font-style: normal;
 }
-.btn-ultra-voilet{
-    background: linear-gradient(to right, #9d617a, #38246f);
-    color: #fff;
-  
-}
-.btn-ultra-voilet:hover{
-    --box-shadow-color: rgba(78, 40, 124, 0.811);
-    box-shadow: 0 0 30px var(--box-shadow-color);
-}
+
 
 
 .about-boxes {
