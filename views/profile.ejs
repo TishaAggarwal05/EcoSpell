@@ -1,35 +1,48 @@
 <% layout('layout/boilerplate') %>
 
-<div class="mt-2 mb-4 container d-flex flex-column">
-    <div>
-        user: <%= user.username %>
+    <div class="container profile-scroll">
+        <h2 class="scroll-title">🧙‍♂️ Adventurer’s Scroll</h2>
+        <div class="scroll-line">
+            <span class="scroll-label">Username:</span>
+            <span class="scroll-value">
+                <%= user.username %>
+            </span>
+        </div>
+        <div class="scroll-line">
+            <span class="scroll-label">Guardian:</span>
+            <span class="scroll-value">
+                <%= user.parent %>
+            </span>
+        </div>
+        <div class="scroll-line">
+            <span class="scroll-label">Magic Mail:</span>
+            <span class="scroll-value">
+                <%= user.email %>
+            </span>
+        </div>
     </div>
-    <div>
-        guardian: <%= user.parent %>
-    </div>
-    <div>
-        email: <%= user.email %>
-    </div>
-</div>
 
-<div>
-    <H2>LATEST LEVEL SCORES</H2>
-    <div class="mt-3 mb-5 container d-flex flex-wrap justify-content-center">
 
-        <% for(let ch of user.chapters) { %>
-            <div class="mx-4 mb-4" style="background-color: #f8f9fa; padding: 15px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); width: 45%; text-align: center;">
-                <div class="mx-3" style="background-color: #007bff; color: white; padding: 10px; border-radius: 8px; margin-bottom: 10px; font-weight: bold;">
-                    <%= ch.phoneme %>: <%= ch.currentAccur %>
+    <div>
+        <h2 class="latest-scores-title">LATEST LEVEL SCORES</h2>
+        <div class="container chapter-wrapper">
+
+            <% for(let ch of user.chapters) { %>
+                <div class="chapter-card">
+                    <div class="chapter-phoneme">
+                        <%= ch.phoneme %>: <%= ch.currentAccur %>
+                    </div>
+                    <div class="chapter-levels">
+                        Levels played: <%= ch.levels.length %>
+                    </div>
                 </div>
-                <div style="background-color: #28a745; color: white; padding: 10px; border-radius: 8px; font-weight: bold;">
-                    Levels played: <%= ch.levels.length %>
-                </div>
-            </div>
-        <% } %>
+                <% } %>
 
+        </div>
     </div>
-</div>
 
-<div class="text-center container">
-    <button class="btn btn-ultra-voilet" onclick="window.location.href='/chapter/<%= user.username %>'">Enter The school of Wonders</button>
-</div>
+    <div class="container enter-btn-container">
+        <button class="btn btn-ultra-voilet" onclick="window.location.href='/chapter/<%= user.username %>'">
+            Enter The school of Wonders
+        </button>
+    </div>

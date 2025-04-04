@@ -1,27 +1,29 @@
 <% layout('layout/boilerplate') %>
-<div class="text-center container">
-    <H1>
-        YOUR QUESTS
+  <div class="text-center container">
+    <H1 style="color: #ffffff;">
+      YOUR QUESTS
     </H1>
-</div>
+  </div>
 
-<div class="container mt-5">
+  <div class="container mt-5">
     <div>
-        <div id="container">
-            <div class="chapter-scroll-container">
-                <div class="d-flex flex-row">
-                  <% for (let ch of user.chapters) { %>
-                    <div class="mx-5 chapter-card position-relative text-white">
-                      <img src="/images/book.png" alt="Book" class="chapter-img">
-                      <div class="overlay">
-                        <h5 class="phoneme-text"><%= ch.phoneme %></h5>
-                      </div>
-                    </div>
-                  <% } %>
+      <div id="container">
+        <div class="chapter-scroll-container">
+          <div class="d-flex flex-row">
+            <% for (let ch of user.chapters) { %>
+              <div class="mx-5 chapter-card position-relative text-white">
+                <img src="/images/book.png" alt="Book" class="chapter-img">
+                <div class="overlay">
+                  <h5 class="phoneme-text">
+                    <%= ch.phoneme %>
+                  </h5>
                 </div>
               </div>
-              
+              <% } %>
+          </div>
         </div>
+
+      </div>
     </div>
-    
-</div>
+
+  </div>
