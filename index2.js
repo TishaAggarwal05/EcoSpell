@@ -289,7 +289,12 @@ app.delete("/User/:id", async (req, res) => {
     }
 });
 
-
+app.get('/chapter/:username',async(req,res)=>{
+    const {username}= req.params;
+    const user = await User.findOne({ username:username}).populate('chapters');
+    console.log(user);
+    res.render('MyChapter',{user})
+})
 
 
 app.listen(port, () => {
