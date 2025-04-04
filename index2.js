@@ -19,7 +19,7 @@ const User = require('./models/users.js');
 const Chapter = require('./models/chapters.js');
 const Level = require('./models/levels.js');
 const fetchData = require('./extract.js'); // function for assessment of json data
-
+const Phoneme = require('./models/phoneme');
 
 
 
@@ -41,7 +41,7 @@ app.use(
 );
 
 async function main() {
-  await mongoose.connect(process.env.MONGODB_URI);
+    await mongoose.connect(process.env.MONGODB_URI);
 }
 main().catch(err => console.log(err));
 
@@ -75,7 +75,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Passport Local Strategy for Authentication
-passport.use(new LocalStrategy({ usernameField: "email" },async (email, password, done) => {
+passport.use(new LocalStrategy({ usernameField: "email" }, async (email, password, done) => {
     const user = await User.findOne({ email });
     if (!user) return done(null, false, { message: "User not found" });
     const isMatch = await bcrypt.compare(password, user.password);
@@ -110,7 +110,7 @@ function isAuthenticated(req, res, next) {
 //             req.flash("error", info.message);
 //             res.render('login', { messages: { error: req.flash("error") || [] } });
 //         }
-        
+
 //         req.login(user, (err) => {
 //             if (err) return next(err);
 //             return res.redirect(`/user/profile/${user._id}`); 
@@ -123,10 +123,10 @@ app.post('/login', (req, res, next) => {
         if (!user) {
             return res.status(401).json({ success: false, message: info.message || "Invalid credentials" });
         }
-        
+
         req.login(user, (err) => {
             if (err) return next(err);
-            return res.json({ success: true, userId: user._id,redirect: `/user/profile/${user._id}` }); // Send JSON response
+            return res.json({ success: true, userId: user._id, redirect: `/user/profile/${user._id}` }); // Send JSON response
         });
     })(req, res, next);
 });
@@ -134,21 +134,62 @@ app.post('/login', (req, res, next) => {
 
 
 
-
-// Logout Route
-app.get('/logout', (req, res) => {
-    req.logout((err) => {
-        if (err) console.error(err);
-        res.redirect("/");
+    // Logout Route
+    app.get('/logout', (req, res) => {
+        req.logout((err) => {
+            if (err) console.error(err);
+            res.redirect("/");
+        });
     });
-});
 
 
 
 
 app.get('/', (req, res) => {
-  res.render('landing');
+    res.render('landing');
 });
+
+
+
+
+
+function generateExercise(phoneme, difficulty) {
+    const matchingEntries = dataset.filter(entry =>
+        entry.instruction.includes(phoneme) && entry.instruction.includes(difficulty)
+    );
+
+    if (matchingEntries.length > 0) {
+        const randomEntry = matchingEntries[Math.floor(Math.random() * matchingEntries.length)];
+        const output = randomEntry.output;
+        return output;
+    } else {
+        return "No exercise found for this phoneme and difficulty.";
+    }
+}
+
+
+app.get('/phoneme', async (req, res) => {
+    try {
+        const { phoneme, difficulty } = req.body;
+        const regexPattern = new RegExp(`phoneme\\s+'/\\s*${phoneme}\\s*/'\\s+and\\s+difficulty\\s+'${difficulty}'`, 'i');
+
+        // Aggregate query to get a random matching document
+        const result = await Phoneme.aggregate([
+            { $match: { instruction: { $regex: regexPattern } } }, // Match instruction field
+            { $sample: { size: 1 } } // Get 1 random result
+        ]);
+
+        if (result.length === 0) {
+            return res.status(404).json({ message: "No matching level found" });
+        }
+
+        res.status(200).json(result[0]); // Send the random level
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+  
 
 
 
@@ -213,7 +254,7 @@ app.post('/user/new', async (req, res) => {
         const newUser = new User({ username, parent, email, password: hashedPassword });
         await newUser.save();
 
-        return res.status(201).json({ success: true, message: "User registered successfully!", userId: newUser._id,redirect: `/realtime/${newUser._id}` });
+        return res.status(201).json({ success: true, message: "User registered successfully!", userId: newUser._id, redirect: `/realtime/${newUser._id}` });
 
     } catch (err) {
         console.error("Error during signup:", err);
@@ -233,9 +274,9 @@ app.post('/initassessment/:id', async (req, res) => {
         const { id } = req.params;
         const { totalN_best } = req.body;
         console.log("total Nbest", totalN_best);
-        const dataEntry = await User.findByIdAndUpdate(id, { 
-            "initialAssessment.date": new Date(), 
-            "initialAssessment.data": totalN_best 
+        const dataEntry = await User.findByIdAndUpdate(id, {
+            "initialAssessment.date": new Date(),
+            "initialAssessment.data": totalN_best
         }, { new: true });
         res.json({ message: "Data saved successfully!", redirect: `/results/${id}` });
     } catch (error) {
@@ -252,8 +293,8 @@ app.get("/results/:id", async (req, res) => {
     const userId = new mongoose.Types.ObjectId(id);
     for (const arr of lowAccur) {
         const phoneme = arr[0];
-        const score= arr[1];
-        const newCh = new Chapter({ user_id: userId, phoneme: phoneme ,currentAccur:score});
+        const score = arr[1];
+        const newCh = new Chapter({ user_id: userId, phoneme: phoneme, currentAccur: score });
         await newCh.save();
         console.log(`New Chapter Created:`, newCh);
         await User.findByIdAndUpdate(userId, { $push: { chapters: newCh._id } }, { new: true });
@@ -289,14 +330,14 @@ app.delete("/User/:id", async (req, res) => {
     }
 });
 
-app.get('/chapter/:username',async(req,res)=>{
-    const {username}= req.params;
-    const user = await User.findOne({ username:username}).populate('chapters');
+app.get('/chapter/:username', async (req, res) => {
+    const { username } = req.params;
+    const user = await User.findOne({ username: username }).populate('chapters');
     console.log(user);
-    res.render('MyChapter',{user})
+    res.render('MyChapter', { user })
 })
 
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+    console.log(`Example app listening on port ${port}`);
 });
